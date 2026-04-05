@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from patient.models import Patient
-from patient.permissions import IsReceptionistUser
+from common.permissions import IsDoctorOrReceptionist
 from patient.serializers import (
     PatientListCreateSerializer,
     PatientRetrieveUpdateSerializer,
@@ -11,7 +11,7 @@ from patient.serializers import (
 
 class PatientListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = PatientListCreateSerializer
-    permission_classes = [IsAuthenticated, IsReceptionistUser]
+    permission_classes = [IsAuthenticated,IsDoctorOrReceptionist]
 
     def get_queryset(self):
         return Patient.objects.filter(
@@ -28,7 +28,7 @@ class PatientListCreateAPIView(generics.ListCreateAPIView):
 
 class PatientRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PatientRetrieveUpdateSerializer
-    permission_classes = [IsAuthenticated, IsReceptionistUser]
+    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
     lookup_field = "alias"
 
     def get_queryset(self):

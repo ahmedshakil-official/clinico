@@ -42,7 +42,7 @@ class CommonUserSerializer(UserCreateSerializer):
     profile_image = serializers.ImageField(required=False)
     user_type = serializers.ChoiceField(
         choices=UserTypeChoices.choices,
-        default=UserTypeChoices.SERVICE_HOLDER,
+        default=UserTypeChoices.SELECT_USER_TYPE,
         required=False,
     )
 
@@ -114,3 +114,38 @@ class CommonUserWithPasswordSerializer(UserCreateSerializer):
         return user
 
 
+
+from patient.models import Patient
+from doctor.models import Doctor
+
+
+class PatientNestedSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Patient
+        fields = [
+            "alias",
+            "slug",
+            "full_name",
+            "gender",
+        ]
+
+    def get_full_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
+
+
+class DoctorNestedSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Doctor
+        fields = [
+            "alias",
+            "slug",
+            "full_name",
+            "specialization",
+        ]
+
+    def get_full_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
