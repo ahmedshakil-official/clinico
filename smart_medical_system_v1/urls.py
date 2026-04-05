@@ -31,6 +31,6 @@ urlpatterns = [
     # path('api/common/', include('common.urls')),
     # path('api/core', include('core.urls')),
     # path('api/doctor/', include('doctor.urls')),
-    # path('api/patient/', include('patient.urls')),
+    path('api/patient/', include('patient.urls')),
     # path('api/prescription/', include('prescription.urls')),
 ]

@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     "doctor",
     "patient",
     "prescription",
-
+    "appointment",
 ]
 
 MIDDLEWARE = [
