@@ -1,11 +1,19 @@
 from django.urls import path
-from .views import (
-    DoctorListCreateView,
-    DoctorRetrieveUpdateView,
+
+from doctor.views import (
+    DoctorListCreateAPIView,
+    DoctorRetrieveUpdateDeleteAPIView,
 )
 
 urlpatterns = [
-    # Doctor
-    path("doctors/", DoctorListCreateView.as_view(), name="doctor-list-create"),
-    path("doctors/<uuid:alias>/", DoctorRetrieveUpdateView.as_view(), name="doctor-detail"),
+    path(
+        "",
+        DoctorListCreateAPIView.as_view(),
+        name="doctor-list-create",
+    ),
+    path(
+        "<uuid:alias>/",
+        DoctorRetrieveUpdateDeleteAPIView.as_view(),
+        name="doctor-detail",
+    ),
 ]

@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from common.enums import NameTitleChoices, UserTypeChoices
-from doctor.models import Doctor
+from receptionist.models import Receptionist
 
 User = get_user_model()
 
 
-class DoctorListCreateSerializer(serializers.ModelSerializer):
+class ReceptionistListCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True, min_length=6)
     first_name = serializers.CharField(write_only=True)
@@ -17,7 +17,7 @@ class DoctorListCreateSerializer(serializers.ModelSerializer):
         choices=NameTitleChoices.choices,
         write_only=True,
         required=False,
-        default=NameTitleChoices.DR,
+        default=NameTitleChoices.MS,
     )
     suburb = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     postal_code = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
@@ -32,7 +32,7 @@ class DoctorListCreateSerializer(serializers.ModelSerializer):
     title_display = serializers.CharField(source="user.title", read_only=True)
 
     class Meta:
-        model = Doctor
+        model = Receptionist
         fields = [
             "id",
             "alias",
@@ -53,14 +53,11 @@ class DoctorListCreateSerializer(serializers.ModelSerializer):
             "postal_code",
             "address",
             "profile_image",
-            "degree",
-            "specialization",
-            "joined_date",
-            "consultation_fee",
-            "chamber_room",
+            "employee_id",
+            "joining_date",
+            "shift",
+            "desk_number",
             "experience_years",
-            "bio",
-            "gender",
             "created_at",
             "updated_at",
         ]
@@ -77,7 +74,7 @@ class DoctorListCreateSerializer(serializers.ModelSerializer):
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
         phone = validated_data.pop("phone", None)
-        title = validated_data.pop("title", NameTitleChoices.DR)
+        title = validated_data.pop("title", NameTitleChoices.MS)
         suburb = validated_data.pop("suburb", None)
         postal_code = validated_data.pop("postal_code", None)
         address = validated_data.pop("address", None)
@@ -96,20 +93,20 @@ class DoctorListCreateSerializer(serializers.ModelSerializer):
             postal_code=postal_code,
             address=address,
             profile_image=profile_image,
-            user_type=UserTypeChoices.DOCTOR,
+            user_type=UserTypeChoices.RECEPTIONIST,
             is_active=True,
         )
 
-        doctor = Doctor.objects.create(
+        receptionist = Receptionist.objects.create(
             user=user,
             created_by=request.user,
             updated_by=request.user,
             **validated_data,
         )
-        return doctor
+        return receptionist
 
 
-class DoctorRetrieveUpdateSerializer(serializers.ModelSerializer):
+class ReceptionistRetrieveUpdateSerializer(serializers.ModelSerializer):
     user_alias = serializers.UUIDField(source="user.alias", read_only=True)
     email = serializers.EmailField(source="user.email", required=False)
     first_name = serializers.CharField(source="user.first_name", required=False)
@@ -126,7 +123,7 @@ class DoctorRetrieveUpdateSerializer(serializers.ModelSerializer):
     profile_image = serializers.ImageField(source="user.profile_image", required=False, allow_null=True)
 
     class Meta:
-        model = Doctor
+        model = Receptionist
         fields = [
             "id",
             "alias",
@@ -141,14 +138,11 @@ class DoctorRetrieveUpdateSerializer(serializers.ModelSerializer):
             "postal_code",
             "address",
             "profile_image",
-            "degree",
-            "specialization",
-            "joined_date",
-            "consultation_fee",
-            "chamber_room",
+            "employee_id",
+            "joining_date",
+            "shift",
+            "desk_number",
             "experience_years",
-            "bio",
-            "gender",
             "created_at",
             "updated_at",
         ]
@@ -177,3 +171,5 @@ class DoctorRetrieveUpdateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+

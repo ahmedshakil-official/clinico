@@ -15,3 +15,15 @@ class IsDoctorOrReceptionist(BasePermission):
                 UserTypeChoices.RECEPTIONIST,
             ]
         )
+
+
+
+class IsAdmin(BasePermission):
+    message = "Only admin users can access this endpoint."
+
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.user_type == UserTypeChoices.ADMIN
+        )

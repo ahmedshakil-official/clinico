@@ -2,4 +2,8 @@ from django.apps import AppConfig
 
 
 class ReceptionistConfig(AppConfig):
-    name = 'receptionist'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "receptionist"
+
+    def ready(self):
+        import receptionist.signals
