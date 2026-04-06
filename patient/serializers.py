@@ -11,13 +11,12 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
     # User fields
     alias = serializers.UUIDField(read_only=True)
     slug = serializers.CharField(read_only=True)
-    email = serializers.EmailField(write_only=True)
-    first_name = serializers.CharField(write_only=True)
-    last_name = serializers.CharField(write_only=True)
+    email = serializers.EmailField(source="user.email")
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
     phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
         choices=NameTitleChoices.choices,
-        write_only=True,
         required=False,
         default=NameTitleChoices.MR,
     )
