@@ -92,8 +92,8 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
 
 
 class PatientRetrieveUpdateSerializer(serializers.ModelSerializer):
-    patient_alias = serializers.UUIDField(read_only=True)
-    patient_slug = serializers.CharField(read_only=True)
+    alias = serializers.UUIDField(read_only=True)
+    slug = serializers.CharField(read_only=True)
 
     email = serializers.EmailField(source="user.email", required=False)
     first_name = serializers.CharField(source="user.first_name", required=False)
