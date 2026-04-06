@@ -11,9 +11,9 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
     # User fields
     alias = serializers.UUIDField(read_only=True)
     slug = serializers.CharField(read_only=True)
-    email = serializers.EmailField(source="user.email")
-    first_name = serializers.CharField(source="user.first_name")
-    last_name = serializers.CharField(source="user.last_name")
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
         choices=NameTitleChoices.choices,
@@ -95,19 +95,19 @@ class PatientRetrieveUpdateSerializer(serializers.ModelSerializer):
     alias = serializers.UUIDField(read_only=True)
     slug = serializers.CharField(read_only=True)
 
-    email = serializers.EmailField(source="user.email", required=False)
-    first_name = serializers.CharField(source="user.first_name", required=False)
-    last_name = serializers.CharField(source="user.last_name", required=False)
-    phone = serializers.CharField(source="user.phone", required=False, allow_blank=True, allow_null=True)
+    email = serializers.EmailField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    phone = serializers.CharField( required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
         source="user.title",
         choices=NameTitleChoices.choices,
         required=False,
     )
-    suburb = serializers.CharField(source="user.suburb", required=False, allow_blank=True, allow_null=True)
-    postal_code = serializers.CharField(source="user.postal_code", required=False, allow_blank=True, allow_null=True)
-    address = serializers.CharField(source="user.address", required=False, allow_blank=True, allow_null=True)
-    profile_image = serializers.ImageField(source="user.profile_image", required=False, allow_null=True)
+    suburb = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    postal_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    address = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    profile_image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Patient
