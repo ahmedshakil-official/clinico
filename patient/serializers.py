@@ -10,7 +10,6 @@ User = get_user_model()
 class PatientListCreateSerializer(serializers.ModelSerializer):
     # User fields
     email = serializers.EmailField(write_only=True)
-    password = serializers.CharField(write_only=True, min_length=6)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     phone = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
@@ -53,7 +52,6 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
             "user_postal_code",
             "user_address",
             "email",
-            "password",
             "first_name",
             "last_name",
             "phone",
@@ -77,7 +75,6 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         email = validated_data.pop("email")
-        password = validated_data.pop("password")
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
         phone = validated_data.pop("phone", None)
@@ -89,9 +86,8 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
 
         request = self.context.get("request")
 
-        user = User.objects.create_user(
+        user = User(
             email=email,
-            password=password,
             first_name=first_name,
             last_name=last_name,
             phone=phone,
@@ -103,6 +99,8 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
             user_type=UserTypeChoices.PATIENT,
             is_active=True,
         )
+        user.set_unusable_password()
+        user.save()
 
         patient = Patient.objects.create(
             user=user,
