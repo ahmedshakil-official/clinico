@@ -149,8 +149,9 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
     ],
+    "DEFAULT_PAGINATION_CLASS": "common.pagination.CustomPageNumberPagination",
     "COERCE_DECIMAL_TO_STRING": False,
-    "PAGE_SIZE": 10,
+    "PAGE_SIZE": 12,
 }
 
 DJOSER = {

@@ -15,6 +15,20 @@ from patient.serializers import (
 class PatientListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = PatientListCreateSerializer
     permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    filterset_fields = ["gender", "blood_group", "date_of_birth"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+        "user__phone",
+    ]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "date_of_birth",
+        "user__first_name",
+    ]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         return Patient.objects.filter(

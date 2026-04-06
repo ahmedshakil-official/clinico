@@ -12,6 +12,23 @@ from receptionist.serializers import (
 class ReceptionistListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = ReceptionistListCreateSerializer
+    filterset_fields = ["joining_date", "shift", "experience_years"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+        "user__phone",
+        "employee_id",
+        "desk_number",
+    ]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "joining_date",
+        "experience_years",
+        "user__first_name",
+    ]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         return Receptionist.objects.filter(

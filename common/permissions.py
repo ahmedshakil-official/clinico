@@ -27,3 +27,15 @@ class IsAdmin(BasePermission):
             and request.user.is_authenticated
             and request.user.user_type == UserTypeChoices.ADMIN
         )
+
+
+class IsAdminOrReceptionist(BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.user_type in [
+                UserTypeChoices.ADMIN,
+                UserTypeChoices.RECEPTIONIST,
+            ]
+        )

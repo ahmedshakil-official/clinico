@@ -9,48 +9,29 @@ User = get_user_model()
 
 class PatientListCreateSerializer(serializers.ModelSerializer):
     # User fields
+    alias = serializers.UUIDField(read_only=True)
+    slug = serializers.CharField(read_only=True)
     email = serializers.EmailField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
-    phone = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
         choices=NameTitleChoices.choices,
         write_only=True,
         required=False,
         default=NameTitleChoices.MR,
     )
-    suburb = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    postal_code = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    address = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    profile_image = serializers.ImageField(write_only=True, required=False, allow_null=True)
+    suburb = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    postal_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    address = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    profile_image = serializers.ImageField(required=False, allow_null=True)
 
-    # Read-only user info
-    user_alias = serializers.UUIDField(source="user.alias", read_only=True)
-    patient_alias = serializers.UUIDField(source="alias", read_only=True)
-    patient_slug = serializers.CharField(source="slug", read_only=True)
-    user_email = serializers.EmailField(source="user.email", read_only=True)
-    user_first_name = serializers.CharField(source="user.first_name", read_only=True)
-    user_last_name = serializers.CharField(source="user.last_name", read_only=True)
-    user_phone = serializers.CharField(source="user.phone", read_only=True)
-    user_title = serializers.CharField(source="user.title", read_only=True)
-    user_suburb = serializers.CharField(source="user.suburb", read_only=True)
-    user_postal_code = serializers.CharField(source="user.postal_code", read_only=True)
-    user_address = serializers.CharField(source="user.address", read_only=True)
 
     class Meta:
         model = Patient
         fields = [
-            "patient_alias",
-            "patient_slug",
-            "user_alias",
-            "user_email",
-            "user_first_name",
-            "user_last_name",
-            "user_phone",
-            "user_title",
-            "user_suburb",
-            "user_postal_code",
-            "user_address",
+            "alias",
+            "slug",
             "email",
             "first_name",
             "last_name",
@@ -112,9 +93,8 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
 
 
 class PatientRetrieveUpdateSerializer(serializers.ModelSerializer):
-    user_alias = serializers.UUIDField(source="user.alias", read_only=True)
-    patient_alias = serializers.UUIDField(source="alias", read_only=True)
-    patient_slug = serializers.CharField(source="slug", read_only=True)
+    patient_alias = serializers.UUIDField(read_only=True)
+    patient_slug = serializers.CharField(read_only=True)
 
     email = serializers.EmailField(source="user.email", required=False)
     first_name = serializers.CharField(source="user.first_name", required=False)
@@ -133,9 +113,8 @@ class PatientRetrieveUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = [
-            "patient_alias",
-            "patient_slug",
-            "user_alias",
+            "alias",
+            "slug",
             "email",
             "first_name",
             "last_name",

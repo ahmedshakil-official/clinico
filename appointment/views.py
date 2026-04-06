@@ -16,6 +16,25 @@ from doctor.models import Doctor
 class AppointmentListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
     serializer_class = AppointmentListCreateSerializer
+    filterset_fields = ["status", "appointment_date", "doctor", "patient"]
+    search_fields = [
+        "patient__user__first_name",
+        "patient__user__last_name",
+        "patient__user__email",
+        "doctor__user__first_name",
+        "doctor__user__last_name",
+        "doctor__specialization",
+        "reason",
+        "notes",
+    ]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "appointment_date",
+        "appointment_time",
+        "status",
+    ]
+    ordering = ["-appointment_date", "-appointment_time", "-created_at"]
 
     def get_queryset(self):
         user = self.request.user

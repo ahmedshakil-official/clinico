@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from common.permissions import IsAdmin
+from common.permissions import IsAdmin, IsAdminOrReceptionist
 from doctor.models import Doctor
 from doctor.serializers import (
     DoctorListCreateSerializer,
@@ -12,6 +12,31 @@ from doctor.serializers import (
 class DoctorListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = DoctorListCreateSerializer
+    filterset_fields = ["gender", "specialization", "joined_date"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+        "user__phone",
+        "degree",
+        "specialization",
+    ]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "joined_date",
+        "consultation_fee",
+        "experience_years",
+        "user__first_name",
+    ]
+    ordering = ["-created_at"]
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            permission_classes = [IsAuthenticated, IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated, IsAdminOrReceptionist]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         return Doctor.objects.filter(
@@ -26,9 +51,15 @@ class DoctorListCreateAPIView(generics.ListCreateAPIView):
 
 
 class DoctorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = DoctorRetrieveUpdateSerializer
     lookup_field = "alias"
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = [IsAuthenticated, IsAdminOrReceptionist]
+        else:
+            permission_classes = [IsAuthenticated, IsAdmin]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         return Doctor.objects.filter(
