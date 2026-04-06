@@ -104,7 +104,6 @@ class PatientListCreateSerializer(serializers.ModelSerializer):
 
         patient = Patient.objects.create(
             user=user,
-            receptionist=request.user,
             created_by=request.user,
             updated_by=request.user,
             **validated_data,

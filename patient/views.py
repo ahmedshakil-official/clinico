@@ -1,6 +1,9 @@
 from rest_framework import generics
+
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 
+from common.enums import UserTypeChoices
 from patient.models import Patient
 from common.permissions import IsDoctorOrReceptionist
 from patient.serializers import (
@@ -11,14 +14,13 @@ from patient.serializers import (
 
 class PatientListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = PatientListCreateSerializer
-    permission_classes = [IsAuthenticated,IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
 
     def get_queryset(self):
         return Patient.objects.filter(
             is_removed=False,
-            receptionist=self.request.user,
             user__is_active=True,
-        ).select_related("user", "receptionist")
+        ).select_related("user", "created_by", "updated_by")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -34,9 +36,8 @@ class PatientRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Patient.objects.filter(
             is_removed=False,
-            receptionist=self.request.user,
             user__is_active=True,
-        ).select_related("user", "receptionist")
+        ).select_related("user")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

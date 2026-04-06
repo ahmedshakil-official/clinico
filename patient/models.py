@@ -34,16 +34,6 @@ class Patient(CreatedAtUpdatedAtBaseModel):
         verbose_name=_("User"),
     )
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    receptionist = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="receptionist_created_patients",
-        verbose_name=_("Receptionist"),
-        limit_choices_to={"user_type": UserTypeChoices.RECEPTIONIST},
-    )
-
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(
         max_length=20,
