@@ -120,6 +120,7 @@ class PatientRetrieveUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = [
+            "id",
             "alias",
             "slug",
             "email",
