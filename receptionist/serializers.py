@@ -8,41 +8,26 @@ User = get_user_model()
 
 
 class ReceptionistListCreateSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(write_only=True)
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True, min_length=6)
-    first_name = serializers.CharField(write_only=True)
-    last_name = serializers.CharField(write_only=True)
-    phone = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
         choices=NameTitleChoices.choices,
-        write_only=True,
         required=False,
         default=NameTitleChoices.MS,
     )
-    suburb = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    postal_code = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    address = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
-    profile_image = serializers.ImageField(write_only=True, required=False, allow_null=True)
-
-    user_alias = serializers.UUIDField(source="user.alias", read_only=True)
-    user_email = serializers.EmailField(source="user.email", read_only=True)
-    first_name_display = serializers.CharField(source="user.first_name", read_only=True)
-    last_name_display = serializers.CharField(source="user.last_name", read_only=True)
-    phone_display = serializers.CharField(source="user.phone", read_only=True)
-    title_display = serializers.CharField(source="user.title", read_only=True)
-
+    suburb = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    postal_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    address = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    profile_image = serializers.ImageField(required=False, allow_null=True)
     class Meta:
         model = Receptionist
         fields = [
             "id",
             "alias",
             "slug",
-            "user_alias",
-            "user_email",
-            "first_name_display",
-            "last_name_display",
-            "phone_display",
-            "title_display",
             "email",
             "password",
             "first_name",
@@ -107,7 +92,7 @@ class ReceptionistListCreateSerializer(serializers.ModelSerializer):
 
 
 class ReceptionistRetrieveUpdateSerializer(serializers.ModelSerializer):
-    user_alias = serializers.UUIDField(source="user.alias", read_only=True)
+    alias = serializers.UUIDField(source="user.alias", read_only=True)
     email = serializers.EmailField(source="user.email", required=False)
     first_name = serializers.CharField(source="user.first_name", required=False)
     last_name = serializers.CharField(source="user.last_name", required=False)
@@ -128,7 +113,6 @@ class ReceptionistRetrieveUpdateSerializer(serializers.ModelSerializer):
             "id",
             "alias",
             "slug",
-            "user_alias",
             "email",
             "first_name",
             "last_name",
