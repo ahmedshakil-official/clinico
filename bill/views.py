@@ -324,7 +324,7 @@ class BillDoctorAnalyticsAPIView(APIView):
             )
             .annotate(
                 total_bills=Count("id"),
-                total_amount=Sum("total_amount"),
+                sum_total_amount=Sum("total_amount"),
                 average_amount=Avg("total_amount"),
             )
             .order_by("-total_bills")
