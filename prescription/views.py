@@ -105,10 +105,7 @@ class PrescriptionListCreateAPIView(generics.ListCreateAPIView):
             from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied("You can only create prescriptions for your own appointments.")
 
-        serializer.save(
-            created_by=self.request.user,
-            updated_by=self.request.user,
-        )
+        serializer.save()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
