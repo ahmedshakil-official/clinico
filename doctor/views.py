@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from common.permissions import IsAdmin, IsAdminOrReceptionist
+from common.permissions import IsAdmin, IsAdminOrReceptionist, IsAdminOrDoctorOrReceptionist
 from doctor.models import Doctor
 from doctor.serializers import (
     DoctorListCreateSerializer,
@@ -35,7 +35,7 @@ class DoctorListCreateAPIView(generics.ListCreateAPIView):
         if self.request.method == "POST":
             permission_classes = [IsAuthenticated, IsAdmin]
         else:
-            permission_classes = [IsAuthenticated, IsAdminOrReceptionist]
+            permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -56,7 +56,7 @@ class DoctorRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self):
         if self.request.method == "GET":
-            permission_classes = [IsAuthenticated, IsAdminOrReceptionist]
+            permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
         else:
             permission_classes = [IsAuthenticated, IsAdmin]
         return [permission() for permission in permission_classes]

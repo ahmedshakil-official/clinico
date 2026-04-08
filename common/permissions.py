@@ -39,3 +39,15 @@ class IsAdminOrReceptionist(BasePermission):
                 UserTypeChoices.RECEPTIONIST,
             ]
         )
+
+class IsAdminOrDoctorOrReceptionist(BasePermission):
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.user_type in [
+                UserTypeChoices.ADMIN,
+                UserTypeChoices.RECEPTIONIST,
+                UserTypeChoices.DOCTOR,
+            ]
+        )
