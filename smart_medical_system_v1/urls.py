@@ -27,7 +27,7 @@ urlpatterns = [
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     # path('api/account', include('account.urls')),
-    # path('api/bill/', include('bill.urls')),
+    path('api/bills/', include('bill.urls')),
     # path('api/common/', include('common.urls')),
     path('api/core/', include('core.urls')),
     path('api/doctors/', include('doctor.urls')),
