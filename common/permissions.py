@@ -51,3 +51,12 @@ class IsAdminOrDoctorOrReceptionist(BasePermission):
                 UserTypeChoices.DOCTOR,
             ]
         )
+
+
+class IsReceptionist(BasePermission):
+    def has_permission(self, request, view):
+        return (
+                request.user
+                and request.user.is_authenticated
+                and request.user.user_type == UserTypeChoices.RECEPTIONIST
+        )
