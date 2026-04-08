@@ -289,10 +289,7 @@ class BillDoctorAnalyticsAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
 
     def get_queryset(self, user):
-        queryset = Bill.objects.filter(
-            is_removed=False,
-            appointment__doctor__isnull=False,
-        )
+        queryset = Bill.objects.filter(is_removed=False)
 
         if user.user_type == UserTypeChoices.ADMIN:
             return queryset
@@ -313,8 +310,11 @@ class BillDoctorAnalyticsAPIView(APIView):
         return Bill.objects.none()
 
     def get(self, request, *args, **kwargs):
+        base_qs = self.get_queryset(request.user)
+
         queryset = (
-            self.get_queryset(request.user)
+            base_qs
+            .exclude(appointment__doctor__isnull=True)
             .values(
                 "appointment__doctor__id",
                 "appointment__doctor__alias",
@@ -336,10 +336,7 @@ class BillMonthlyTrendAnalyticsAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
 
     def get_queryset(self, user):
-        queryset = Bill.objects.filter(
-            is_removed=False,
-            appointment__appointment_date__isnull=False,
-        )
+        queryset = Bill.objects.filter(is_removed=False)
 
         if user.user_type == UserTypeChoices.ADMIN:
             return queryset
@@ -360,8 +357,11 @@ class BillMonthlyTrendAnalyticsAPIView(APIView):
         return Bill.objects.none()
 
     def get(self, request, *args, **kwargs):
+        base_qs = self.get_queryset(request.user)
+
         queryset = (
-            self.get_queryset(request.user)
+            base_qs
+            .exclude(appointment__appointment_date__isnull=True)
             .annotate(
                 year=ExtractYear("appointment__appointment_date"),
                 month=ExtractMonth("appointment__appointment_date"),
