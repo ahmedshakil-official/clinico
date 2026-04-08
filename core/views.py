@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from common.permissions import IsDoctorOrReceptionist
+from common.permissions import IsAdmin
 from core.filters import PatientMedicalRecordFilter
 from core.models import PatientMedicalRecord
 from core.serializers import (
@@ -16,7 +16,7 @@ from core.serializers import (
 
 class PatientMedicalRecordListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = PatientMedicalRecordListCreateSerializer
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
     filterset_class = PatientMedicalRecordFilter
 
     search_fields = [
@@ -63,7 +63,7 @@ class PatientMedicalRecordListCreateAPIView(generics.ListCreateAPIView):
 
 class PatientMedicalRecordRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PatientMedicalRecordRetrieveUpdateSerializer
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
     lookup_field = "alias"
 
     def get_queryset(self):
@@ -91,7 +91,7 @@ class PatientMedicalRecordRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDes
 
 
 class PatientMedicalRecordDashboardAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = PatientMedicalRecord.objects.filter(is_removed=False)
@@ -110,7 +110,7 @@ class PatientMedicalRecordDashboardAPIView(APIView):
 
 
 class PatientMedicalRecordConditionAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -129,7 +129,7 @@ class PatientMedicalRecordConditionAnalyticsAPIView(APIView):
 
 
 class PatientMedicalRecordProcedureAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -148,7 +148,7 @@ class PatientMedicalRecordProcedureAnalyticsAPIView(APIView):
 
 
 class PatientMedicalRecordOutcomeAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -166,7 +166,7 @@ class PatientMedicalRecordOutcomeAnalyticsAPIView(APIView):
 
 
 class PatientMedicalRecordDoctorAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -193,7 +193,7 @@ class PatientMedicalRecordDoctorAnalyticsAPIView(APIView):
 
 
 class PatientMedicalRecordMonthlyCostTrendAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -217,7 +217,7 @@ class PatientMedicalRecordMonthlyCostTrendAPIView(APIView):
 
 
 class PatientMedicalRecordMonthlyRecordTrendAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -237,7 +237,7 @@ class PatientMedicalRecordMonthlyRecordTrendAPIView(APIView):
 
 
 class PatientMedicalRecordSatisfactionDistributionAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -250,7 +250,7 @@ class PatientMedicalRecordSatisfactionDistributionAPIView(APIView):
 
 
 class PatientMedicalRecordReadmissionDistributionAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -263,7 +263,7 @@ class PatientMedicalRecordReadmissionDistributionAPIView(APIView):
 
 
 class PatientMedicalRecordGenderDistributionAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = (
@@ -276,7 +276,7 @@ class PatientMedicalRecordGenderDistributionAPIView(APIView):
 
 
 class PatientMedicalRecordAgeGroupAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = PatientMedicalRecord.objects.filter(is_removed=False)
@@ -304,7 +304,7 @@ class PatientMedicalRecordAgeGroupAnalyticsAPIView(APIView):
 
 
 class PatientMedicalRecordLengthOfStayAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctorOrReceptionist]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get(self, request, *args, **kwargs):
         queryset = PatientMedicalRecord.objects.filter(is_removed=False)
