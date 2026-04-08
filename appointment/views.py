@@ -34,7 +34,7 @@ class AppointmentListCreateAPIView(generics.ListCreateAPIView):
         "appointment_time",
         "status",
     ]
-    ordering = ["-appointment_date", "-appointment_time", "-created_at"]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         user = self.request.user
