@@ -1,19 +1,91 @@
 from django.urls import path
 
 from core.views import (
+    PatientMedicalRecordAgeGroupAnalyticsAPIView,
+    PatientMedicalRecordConditionAnalyticsAPIView,
+    PatientMedicalRecordDashboardAPIView,
+    PatientMedicalRecordDoctorAnalyticsAPIView,
+    PatientMedicalRecordGenderDistributionAPIView,
+    PatientMedicalRecordLengthOfStayAnalyticsAPIView,
     PatientMedicalRecordListCreateAPIView,
+    PatientMedicalRecordMonthlyCostTrendAPIView,
+    PatientMedicalRecordMonthlyRecordTrendAPIView,
+    PatientMedicalRecordOutcomeAnalyticsAPIView,
+    PatientMedicalRecordProcedureAnalyticsAPIView,
+    PatientMedicalRecordReadmissionDistributionAPIView,
     PatientMedicalRecordRetrieveUpdateDeleteAPIView,
+    PatientMedicalRecordSatisfactionDistributionAPIView,
 )
 
 urlpatterns = [
     path(
-        "",
+        "medical-records/",
         PatientMedicalRecordListCreateAPIView.as_view(),
         name="patient-medical-record-list-create",
     ),
     path(
-        "<uuid:alias>/",
+        "medical-records/<uuid:alias>/",
         PatientMedicalRecordRetrieveUpdateDeleteAPIView.as_view(),
         name="patient-medical-record-detail",
+    ),
+    path(
+        "medical-records/dashboard/",
+        PatientMedicalRecordDashboardAPIView.as_view(),
+        name="patient-medical-record-dashboard",
+    ),
+    path(
+        "medical-records/analytics/condition/",
+        PatientMedicalRecordConditionAnalyticsAPIView.as_view(),
+        name="patient-medical-record-condition-analytics",
+    ),
+    path(
+        "medical-records/analytics/procedure/",
+        PatientMedicalRecordProcedureAnalyticsAPIView.as_view(),
+        name="patient-medical-record-procedure-analytics",
+    ),
+    path(
+        "medical-records/analytics/outcome/",
+        PatientMedicalRecordOutcomeAnalyticsAPIView.as_view(),
+        name="patient-medical-record-outcome-analytics",
+    ),
+    path(
+        "medical-records/analytics/doctor/",
+        PatientMedicalRecordDoctorAnalyticsAPIView.as_view(),
+        name="patient-medical-record-doctor-analytics",
+    ),
+    path(
+        "medical-records/analytics/monthly-cost-trend/",
+        PatientMedicalRecordMonthlyCostTrendAPIView.as_view(),
+        name="patient-medical-record-monthly-cost-trend",
+    ),
+    path(
+        "medical-records/analytics/monthly-record-trend/",
+        PatientMedicalRecordMonthlyRecordTrendAPIView.as_view(),
+        name="patient-medical-record-monthly-record-trend",
+    ),
+    path(
+        "medical-records/analytics/satisfaction-distribution/",
+        PatientMedicalRecordSatisfactionDistributionAPIView.as_view(),
+        name="patient-medical-record-satisfaction-distribution",
+    ),
+    path(
+        "medical-records/analytics/readmission-distribution/",
+        PatientMedicalRecordReadmissionDistributionAPIView.as_view(),
+        name="patient-medical-record-readmission-distribution",
+    ),
+    path(
+        "medical-records/analytics/gender-distribution/",
+        PatientMedicalRecordGenderDistributionAPIView.as_view(),
+        name="patient-medical-record-gender-distribution",
+    ),
+    path(
+        "medical-records/analytics/age-groups/",
+        PatientMedicalRecordAgeGroupAnalyticsAPIView.as_view(),
+        name="patient-medical-record-age-groups",
+    ),
+    path(
+        "medical-records/analytics/length-of-stay-groups/",
+        PatientMedicalRecordLengthOfStayAnalyticsAPIView.as_view(),
+        name="patient-medical-record-length-of-stay-groups",
     ),
 ]
