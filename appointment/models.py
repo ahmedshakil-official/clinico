@@ -56,7 +56,7 @@ class Appointment(CreatedAtUpdatedAtBaseModel):
     is_removed = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["-appointment_date", "-appointment_time", "-created_at"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.patient.user.first_name} with Dr. {self.doctor.user.first_name} on {self.appointment_date}"
