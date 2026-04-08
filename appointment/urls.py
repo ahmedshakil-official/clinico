@@ -2,7 +2,7 @@ from django.urls import path
 
 from appointment.views import (
     AppointmentListCreateAPIView,
-    AppointmentRetrieveUpdateDeleteAPIView,
+    AppointmentRetrieveUpdateDeleteAPIView, DoctorOwnAppointmentListAPIView,
 )
 
 urlpatterns = [
@@ -15,5 +15,10 @@ urlpatterns = [
         "<uuid:alias>/",
         AppointmentRetrieveUpdateDeleteAPIView.as_view(),
         name="appointment-detail",
+    ),
+    path(
+        "my-appointments/",
+        DoctorOwnAppointmentListAPIView.as_view(),
+        name="doctor-own-appointments",
     ),
 ]

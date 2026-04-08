@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from common.enums import UserTypeChoices
 from appointment.models import Appointment
 
-from common.permissions import IsDoctorOrReceptionist
+from common.permissions import IsDoctorOrReceptionist, IsDoctor
 from appointment.serializers import (
     AppointmentListCreateSerializer,
     AppointmentRetrieveUpdateSerializer,
@@ -128,3 +128,47 @@ class AppointmentRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIVi
         instance.is_removed = True
         instance.updated_by = self.request.user
         instance.save(update_fields=["is_removed", "updated_by", "updated_at"])
+
+
+class DoctorOwnAppointmentListAPIView(generics.ListAPIView):
+    serializer_class = AppointmentListCreateSerializer
+    permission_classes = [IsAuthenticated, IsDoctor]
+
+    filterset_fields = ["status", "appointment_date"]
+    search_fields = [
+        "patient__user__first_name",
+        "patient__user__last_name",
+        "patient__user__email",
+        "reason",
+        "notes",
+    ]
+    ordering_fields = [
+        "created_at",
+        "updated_at",
+        "appointment_date",
+        "appointment_time",
+    ]
+    ordering = ["-created_at"]   # recent created first
+
+    def get_queryset(self):
+        doctor_profile = Doctor.objects.filter(
+            user=self.request.user,
+            is_removed=False,
+            user__is_active=True,
+        ).first()
+
+        if not doctor_profile:
+            return Appointment.objects.none()
+
+        return Appointment.objects.filter(
+            is_removed=False,
+            doctor=doctor_profile,
+            patient__is_removed=False,
+            patient__user__is_active=True,
+        ).select_related(
+            "patient",
+            "patient__user",
+            "doctor",
+            "doctor__user",
+            "created_by_user",
+        ).order_by("-created_at")
