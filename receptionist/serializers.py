@@ -19,14 +19,30 @@ class ReceptionistListCreateSerializer(serializers.ModelSerializer):
         required=False,
         default=NameTitleChoices.MS,
     )
-    suburb = serializers.CharField( source="user.suburb",
-        required=False, allow_blank=True, allow_null=True)
-    postal_code = serializers.CharField( source="user.postal_code",
-        required=False, allow_blank=True, allow_null=True)
-    address = serializers.CharField( source="user.address",
-        required=False, allow_blank=True, allow_null=True)
-    profile_image = serializers.ImageField( source="user.profile_image",
-        required=False, allow_null=True)
+    suburb = serializers.CharField(
+        source="user.suburb",
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+    postal_code = serializers.CharField(
+        source="user.postal_code",
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+    address = serializers.CharField(
+        source="user.address",
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+    profile_image = serializers.ImageField(
+        source="user.profile_image",
+        required=False,
+        allow_null=True,
+    )
+
     class Meta:
         model = Receptionist
         fields = [
@@ -53,22 +69,30 @@ class ReceptionistListCreateSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "alias", "slug", "created_at", "updated_at"]
 
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("A user with this email already exists.")
-        return value
+    def validate(self, attrs):
+        user_data = attrs.get("user", {})
+        email = user_data.get("email")
+
+        if email and User.objects.filter(email=email).exists():
+            raise serializers.ValidationError({
+                "email": "A user with this email already exists."
+            })
+
+        return attrs
 
     def create(self, validated_data):
-        email = validated_data.pop("email")
-        password = validated_data.pop("password")
-        first_name = validated_data.pop("first_name")
-        last_name = validated_data.pop("last_name")
-        phone = validated_data.pop("phone", None)
-        title = validated_data.pop("title", NameTitleChoices.MS)
-        suburb = validated_data.pop("suburb", None)
-        postal_code = validated_data.pop("postal_code", None)
-        address = validated_data.pop("address", None)
-        profile_image = validated_data.pop("profile_image", None)
+        user_data = validated_data.pop("user", {})
+
+        email = user_data.get("email")
+        password = user_data.get("password")
+        first_name = user_data.get("first_name")
+        last_name = user_data.get("last_name")
+        phone = user_data.get("phone", None)
+        title = user_data.get("title", NameTitleChoices.MS)
+        suburb = user_data.get("suburb", None)
+        postal_code = user_data.get("postal_code", None)
+        address = user_data.get("address", None)
+        profile_image = user_data.get("profile_image", None)
 
         request = self.context.get("request")
 
