@@ -8,20 +8,25 @@ User = get_user_model()
 
 
 class ReceptionistListCreateSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True, min_length=6)
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    email = serializers.EmailField(source="user.email")
+    password = serializers.CharField(source="user.password", write_only=True, min_length=6)
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+    phone = serializers.CharField(source="user.phone", required=False, allow_blank=True, allow_null=True)
     title = serializers.ChoiceField(
+        source="user.title",
         choices=NameTitleChoices.choices,
         required=False,
         default=NameTitleChoices.MS,
     )
-    suburb = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    postal_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    address = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    profile_image = serializers.ImageField(required=False, allow_null=True)
+    suburb = serializers.CharField( source="user.suburb",
+        required=False, allow_blank=True, allow_null=True)
+    postal_code = serializers.CharField( source="user.postal_code",
+        required=False, allow_blank=True, allow_null=True)
+    address = serializers.CharField( source="user.address",
+        required=False, allow_blank=True, allow_null=True)
+    profile_image = serializers.ImageField( source="user.profile_image",
+        required=False, allow_null=True)
     class Meta:
         model = Receptionist
         fields = [
