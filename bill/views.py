@@ -369,10 +369,10 @@ class BillMonthlyTrendAnalyticsAPIView(APIView):
             .values("year", "month")
             .annotate(
                 total_bills=Count("id"),
-                total_amount=Sum("total_amount"),
-                total_discount=Sum("discount"),
-                total_tax=Sum("tax"),
-                average_amount=Avg("total_amount"),
+                sum_total_amount=Sum("total_amount"),
+                sum_discount=Sum("discount"),
+                sum_tax=Sum("tax"),
+                avg_total_amount=Avg("total_amount"),
             )
             .order_by("year", "month")
         )
