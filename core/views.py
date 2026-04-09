@@ -63,8 +63,14 @@ class PatientMedicalRecordListCreateAPIView(generics.ListCreateAPIView):
 
 class PatientMedicalRecordRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PatientMedicalRecordRetrieveUpdateSerializer
-    permission_classes = [IsAuthenticated, IsAdmin]
     lookup_field = "alias"
+
+    def get_permissions(self):
+        if self.request.method in ["PATCH", "PUT", "DELETE"]:
+            permission_classes = [IsAuthenticated, IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         return PatientMedicalRecord.objects.filter(
@@ -88,7 +94,6 @@ class PatientMedicalRecordRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDes
         instance.is_removed = True
         instance.updated_by = self.request.user
         instance.save(update_fields=["is_removed", "updated_by", "updated_at"])
-
 
 class PatientMedicalRecordDashboardAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdmin]
