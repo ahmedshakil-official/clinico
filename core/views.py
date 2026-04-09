@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from common.permissions import IsAdmin
+from common.permissions import IsAdmin, IsAdminOrDoctorOrReceptionist
 from core.filters import PatientMedicalRecordFilter
 from core.models import PatientMedicalRecord
 from core.serializers import (
@@ -16,7 +16,7 @@ from core.serializers import (
 
 class PatientMedicalRecordListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = PatientMedicalRecordListCreateSerializer
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
     filterset_class = PatientMedicalRecordFilter
 
     search_fields = [
@@ -110,7 +110,7 @@ class PatientMedicalRecordDashboardAPIView(APIView):
 
 
 class PatientMedicalRecordConditionAnalyticsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdminOrDoctorOrReceptionist]
 
     def get(self, request, *args, **kwargs):
         queryset = (
